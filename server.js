@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const ejs = require("ejs");
-const {userModal, inventory_Modal} = require("./userSchema");
+const {userModal, inventory_Modal, orderModel} = require("./userSchema");
 
 
 const app = express();
@@ -53,6 +53,22 @@ app.post("/inventory",(req,res)=>{
     })
 });
 
+app.post("/order",async(req,res)=>{
+    
+    const item =    await inventory_Modal.find({inventory_id: req.body.inventory_id});
+    if(item.length){
+        if(item[0].available_quantity >= req.body.quantity){
+            const resultquantity = item[0].available_quantity - req.body.quantity;
+            const orderData = await  orderModel.create({customer_id: req.body.customer_id,inventory_id: req.body.inventory_id,item_name: req.body.item_name,quantity: req.body.quantity});
+            res.status(200).send(orderData);
+            const inventoryupdate = await inventory_Modal.updateOne({inventory_id: req.body.inventory_id},{available_quantity: resultquantity});
+            console.log(inventoryupdate);
+        }else{
+            res.status(400).send("out of stock");
+        }
+    }
+});
+
 
 app.get("/inventory/electronics",(req,res)=>{
     inventory_Modal.find({inventory_type: "Electronics"}).then((electronics)=>{
@@ -79,5 +95,10 @@ app.get("/inventory/furniture",(req,res)=>{
         res.render( "furnitures",{furnitures});
     }).catch((err)=>{
         console.log(err);
+    })
+});
+app.get("/order",(req,res)=>{
+    orderModel.find().then((orders)=>{
+        res.render("orders",{orders});
     })
 });

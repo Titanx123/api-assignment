@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <style>
+            table , tr ,td , th {
+                border: 1px solid;
+            }
+        </style>
+            
+    </head>
+    <body>
+        <div>
+            
+            <h1>Orders Table</h1>
+            <table>
+                <tr>
+                    <th>Customer_Id</th>
+                    <th>Inventory_Id</th>
+                    <th>Item Name</th>
+                    <th>Quantity</th>
+                </tr>
+
+                <% for (let i = 0; i < orders.length;i++) {%>
+                    <tr>
+                        <td><%= orders[i].customer_id %></td>
+                        <td><%= orders[i].inventory_id %></td>
+                        <td><%= orders[i].item_name %></td>
+                        <td><%= orders[i].quantity %></td>
+
+                    </tr>
+
+                    
+                <% } %>
+        
+                </table>
+        </div>
+    </body>
+</html>

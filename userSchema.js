@@ -14,8 +14,16 @@ const inventorySchema = new mongoose.Schema({
     available_quantity: Number
 });
 
+const orderSchema = new mongoose.Schema({
+    customer_id : Number,
+    inventory_id: Number,
+    item_name: String,
+    quantity: Number
+});
+
 // user is the collection name
 const userModal = mongoose.model("user",userSchema);
 const inventory_Modal = mongoose.model("inventory",inventorySchema);
+const orderModel = mongoose.model("order",orderSchema);
 // exporting the schema
-module.exports = {userModal,inventory_Modal};
+module.exports = {userModal,inventory_Modal,orderModel};
